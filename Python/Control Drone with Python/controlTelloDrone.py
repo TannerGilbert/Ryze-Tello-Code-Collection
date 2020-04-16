@@ -1,7 +1,10 @@
+import os
+import sys
+sys.path.append('..')
+
 from djitellopy import Tello
 import argparse
 import cv2
-import os
 import keyboard
 
 
