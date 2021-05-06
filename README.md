@@ -2,23 +2,24 @@
 
 ![Ryze Tello Drone](https://images-na.ssl-images-amazon.com/images/I/71Mu%2Bpnre8L._AC_SX466_.jpg)
 
-The Ryze Tello is a 100€ feature-backed mini-drone from Ryze and DJI. It can be flown with an mobile app or an optional Bluetooth remote. You can also program the drone over UDP. This repository contains guides for controlling the Tello with both JavaScript and Python as well as Python code for Person Following.
+The Ryze Tello is a 100€ feature-backed mini-drone from Ryze and DJI. 
 
-## [Control Ryze Tello Drone with Node.js and Vue](<JavaScript/Control DJI Tello Drone with Node.js and Vue>)
+Features:
+* Weight: Approximately 80g
+* Built-In Functions: Range Finder, 5MP Camera with 720P Live View  Vision System, WIFI 802.11n 2.4G,
+* Max Flight Distance: 100m
+* Speed: 8m/s
+* Flight Time: Up to 15min per battery
+* Detachable Battery: 1.1Ah/3.8V
+* Port: Micro USB Charging Port
 
-Control the Ryze Tello using Node.js and Vue.
+It can be flown with a mobile app or an optional bluetooth remote. You can also program the drone over UDP.
 
-![](doc/vue_website.png)
-
-[![Control Tello using Javascript](https://img.youtube.com/vi/egJJil9i4w0/0.jpg)](https://youtu.be/egJJil9i4w0)
-
-## [Control Ryze Tello Drone with Python](<Python/Control Drone with Python>)
-
-Control drone using keyboard with Python.
-
-## Person/Face Following in Python
-
-Detect Person or Face using OpenCV and Caffe and use the size and location of the detected bounding box to make the drone follow the person.
+## Examples
+* [Control Ryze Tello Drone with Node.js and Vue](JavaScript/)
+* [Control Ryze Tello Drone with Python](Python/control_drone_with_keyboard)
+* [Person Following](Python/person_following)
+* [Face Following](Python/face_following)
 
 ## Author
  **Gilbert Tanner**
