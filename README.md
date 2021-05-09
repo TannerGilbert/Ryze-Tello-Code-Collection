@@ -17,9 +17,9 @@ It can be flown with a mobile app or an optional bluetooth remote. You can also 
 
 ## Examples
 * [Control Ryze Tello Drone with Node.js and Vue](JavaScript/)
-* [Control Ryze Tello Drone with Python](Python/control_drone_with_keyboard)
-* [Person Following](Python/person_following)
-* [Face Following](Python/face_following)
+* [Control Ryze Tello Drone with Python](Python/DJITelloPy_Examples/control_drone_with_keyboard)
+* [Person Following](Python/DJITelloPy_Examples/person_following)
+* [Face Following](Python/DJITelloPy_Examples/face_following)
 
 ## Author
  **Gilbert Tanner**

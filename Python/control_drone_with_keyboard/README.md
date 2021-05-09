@@ -1,1 +1,0 @@
-# Control the Ryze Tello with Python
