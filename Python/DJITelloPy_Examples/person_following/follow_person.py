@@ -42,18 +42,8 @@ class Drone:
             os.makedirs(self.save_path, exist_ok=True)
 
     def run(self):
-        if not self.tello.connect():
-            print("Tello not connected")
-            return
-        elif not self.tello.set_speed(self.speed):
-            print('Not set speed to lowest possible')
-            return
-        elif not self.tello.streamoff():
-            print("Could not stop video stream")
-            return
-        elif not self.tello.streamon():
-            print("Could not start video stream")
-            return
+        self.tello.connect()
+        self.tello.streamon()
 
         self.tello.get_battery()
 
@@ -87,7 +77,8 @@ class Drone:
                 count += 1
 
             x_min, y_min, x_max, y_max = self.detector.detectSingle(frameBGR)
-            cv2.rectangle(frameBGR, (x_min, y_min), (x_max, y_max), (255, 0, 0), 2)
+            cv2.rectangle(frameBGR, (x_min, y_min),
+                          (x_max, y_max), (255, 0, 0), 2)
 
             if not self.flight_mode and self.send_rc_control and x_max != 0 and y_max != 0:
                 # these are our target coordinates
@@ -95,7 +86,8 @@ class Drone:
                 targ_cord_y = int((y_min + y_max) / 2)
 
                 # This calculates the vector from your face to the center of the screen
-                vTrue = np.array((int(self.dimensions[0]/2), int(self.dimensions[1]/2), sizes[self.distance]))
+                vTrue = np.array(
+                    (int(self.dimensions[0]/2), int(self.dimensions[1]/2), sizes[self.distance]))
                 vTarget = np.array((targ_cord_x, targ_cord_y, (x_max-x_min)*2))
                 vDistance = vTrue - vTarget
 
@@ -127,12 +119,13 @@ class Drone:
                 self.left_right_velocity = 0
 
                 # Draw the target as a circle
-                cv2.circle(frameBGR, (targ_cord_x, targ_cord_y), 10, (0, 255, 0), 2)
+                cv2.circle(frameBGR, (targ_cord_x, targ_cord_y),
+                           10, (0, 255, 0), 2)
 
                 # Draw the safety zone
                 cv2.rectangle(frameBGR, (targ_cord_x - self.safety_x, targ_cord_y - self.safety_y), (targ_cord_x + self.safety_x, targ_cord_y + self.safety_y),
                               (0, 255, 0), 2)
-            elif not self.flight_mode and self.send_rc_control and x_max==0 and y_max==0:
+            elif not self.flight_mode and self.send_rc_control and x_max == 0 and y_max == 0:
                 self.for_back_velocity = 0
                 self.left_right_velocity = 0
                 self.yaw_velocity = 0
@@ -183,15 +176,18 @@ class Drone:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-os', '--overwrite_speed', type=int, default=30, help='Speed for manual use')
+    parser.add_argument('-os', '--overwrite_speed', type=int,
+                        default=30, help='Speed for manual use')
     parser.add_argument('-fbs', '--forward_backward_speed', type=int, default=20,
                         help='Speed of forward and backward movement drone')
     parser.add_argument('-ss', '--steering_speed', type=int, default=40,
                         help='Steering speed')
     parser.add_argument('-uds', '--up_down_speed', type=int, default=20,
                         help='Speed of up and down movement drone')
-    parser.add_argument('-sa', '--save_session', action='store_true', help='Record flight')
-    parser.add_argument('-sp', '--save_path', type=str, default="session/", help="Path where images will get saved")
+    parser.add_argument('-sa', '--save_session',
+                        action='store_true', help='Record flight')
+    parser.add_argument('-sp', '--save_path', type=str,
+                        default="session/", help="Path where images will get saved")
     parser.add_argument('-d', '--distance', type=int, default=0,
                         help='use -d to change the distance of the drone. Range 0-2')
     parser.add_argument('-sx', '--safety_x', type=int, default=100,

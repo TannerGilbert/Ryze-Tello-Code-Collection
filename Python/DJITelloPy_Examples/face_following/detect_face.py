@@ -7,7 +7,8 @@ import numpy as np
 class detectFaces:
 
     def __init__(self):
-        self.detector = cv2.dnn.readNetFromCaffe('deploy.prototxt', 'res10_300x300_ssd_iter_140000.caffemodel')
+        self.detector = cv2.dnn.readNetFromCaffe(
+            'deploy.prototxt', 'res10_300x300_ssd_iter_140000.caffemodel')
         self.embedder = cv2.dnn.readNetFromTorch('openface_nn4.small2.v1.t7')
 
     def detectSingle(self, image):
