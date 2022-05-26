@@ -7,7 +7,8 @@ import numpy as np
 class detectPerson:
 
     def __init__(self):
-        self.detector = cv2.dnn.readNetFromCaffe('MobileNetSSD_deploy.prototxt', 'MobileNetSSD_deploy.caffemodel')
+        self.detector = cv2.dnn.readNetFromCaffe(
+            'MobileNetSSD_deploy.prototxt', 'MobileNetSSD_deploy.caffemodel')
 
     def detectSingle(self, image):
         (h, w) = image.shape[:2]

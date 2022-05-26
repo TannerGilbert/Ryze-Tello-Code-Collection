@@ -1,31 +1,31 @@
+<script>
+import Commands from "./components/Commands.vue";
+import DroneState from "./components/DroneState.vue";
+
+export default {
+  components: {
+    Commands,
+    DroneState,
+  },
+};
+</script>
+
 <template>
-  <div id="app">
+  <div>
     <h1>Ryze Tello Drone Control</h1>
     <Commands />
     <DroneState />
   </div>
 </template>
 
-<script>
-import Commands from "./components/Commands.vue";
-import DroneState from './components/DroneState.vue';
-
-export default {
-  name: "app",
-  components: {
-    Commands,
-    DroneState,
-  }
-};
-</script>
-
 <style>
+@import "./assets/base.css";
+
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  font-weight: normal;
 }
 </style>

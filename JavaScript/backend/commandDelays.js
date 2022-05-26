@@ -13,9 +13,9 @@ const commandDelays = {
   ccw: 5000,
   flip: 3000,
   speed: 3000,
-  'battery?': 500,
-  'speed?': 500,
-  'time?': 500,
+  "battery?": 500,
+  "speed?": 500,
+  "time?": 500,
 };
 
 module.exports = commandDelays;

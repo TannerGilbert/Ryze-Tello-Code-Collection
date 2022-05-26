@@ -7,7 +7,7 @@ import keyboard
 
 
 class RyzeTello:
-    def __init__(self, speed, save_session, save_path):
+    def __init__(self, save_session, save_path):
         # Initialize Tello object
         self.tello = Tello()
 
@@ -18,7 +18,6 @@ class RyzeTello:
         self.yaw_velocity = 0
         self.send_rc_control = False
 
-        self.speed = speed
         self.save_session = save_session
         self.save_path = save_path
 
@@ -26,18 +25,8 @@ class RyzeTello:
             os.makedirs(self.save_path, exist_ok=True)
 
     def run(self):
-        if not self.tello.connect():
-            print("Tello not connected")
-            return
-        elif not self.tello.set_speed(self.speed):
-            print('Not set speed to lowest possible')
-            return
-        elif not self.tello.streamoff():
-            print("Could not stop video stream")
-            return
-        elif not self.tello.streamon():
-            print("Could not start video stream")
-            return
+        self.tello.connect()
+        self.tello.streamon()
 
         self.tello.get_battery()
 
@@ -48,7 +37,7 @@ class RyzeTello:
             if frame_read.stopped:
                 frame_read.stop()
                 break
-            
+
             frame = frame_read.frame
 
             if self.save_session:
@@ -56,7 +45,7 @@ class RyzeTello:
                 imgCount += 1
 
             k = cv2.waitKey(20)
-            
+
             if keyboard.is_pressed('esc'):  # break when ESC is pressed
                 break
             elif keyboard.is_pressed('t'):
@@ -74,7 +63,7 @@ class RyzeTello:
                     self.for_back_velocity = -self.speed
                 else:
                     self.for_back_velocity = 0
-                
+
                 # fligh left & right
                 if keyboard.is_pressed('d'):
                     self.left_right_velocity = self.speed
@@ -82,7 +71,7 @@ class RyzeTello:
                     self.left_right_velocity = -self.speed
                 else:
                     self.left_right_velocity = 0
-    
+
                 # fligh up & down
                 if keyboard.is_pressed('up'):
                     self.up_down_velocity = self.speed
@@ -99,24 +88,27 @@ class RyzeTello:
                 else:
                     self.yaw_velocity = 0
 
-                print(self.left_right_velocity, self.for_back_velocity, self.up_down_velocity, self.yaw_velocity)
+                print(self.left_right_velocity, self.for_back_velocity,
+                      self.up_down_velocity, self.yaw_velocity)
                 # Send velocities to Drone
-                self.tello.send_rc_control(self.left_right_velocity, self.for_back_velocity, self.up_down_velocity, self.yaw_velocity)
+                self.tello.send_rc_control(
+                    self.left_right_velocity, self.for_back_velocity, self.up_down_velocity, self.yaw_velocity)
 
             # cv2.putText(frame, f'Battery: {str(self.tello.get_battery())[:2]}%', (30, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
             cv2.imshow('Tello Drone', frame)
-        
-        # Destroy cv2 windows and end drone connection 
+
+        # Destroy cv2 windows and end drone connection
         cv2.destroyAllWindows()
         self.tello.end()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--speed', type=int, default=40, help='Speed of drone')
-    parser.add_argument('-sa', '--save_session', action='store_true', help='Record flight')
-    parser.add_argument('-sp', '--save_path', type=str, default="session/", help="Path where images will get saved")
+    parser.add_argument('-sa', '--save_session',
+                        action='store_true', help='Record flight')
+    parser.add_argument('-sp', '--save_path', type=str,
+                        default="session/", help="Path where images will get saved")
     args = parser.parse_args()
 
-    drone = RyzeTello(args.speed, args.save_session, args.save_path)
+    drone = RyzeTello(args.save_session, args.save_path)
     drone.run()

@@ -1,4 +1,2 @@
-numpy
-djitellopy2
-opencv_python
-keyboard
+djitellopy==2.4.0
+keyboard==0.13.5
