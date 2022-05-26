@@ -1,2 +1,2 @@
 djitellopy==2.4.0
-numpy==1.19.5
+numpy==1.21.0
