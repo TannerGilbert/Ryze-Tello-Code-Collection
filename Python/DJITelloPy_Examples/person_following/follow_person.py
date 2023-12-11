@@ -1,10 +1,10 @@
+import argparse
 import os
 
-from djitellopy import Tello
 import cv2
 import numpy as np
-import argparse
 from detect_person import detectPerson
+from djitellopy import Tello
 
 # TODO: Add better distance values
 sizes = [800, 700, 600, 500, 406]
@@ -45,8 +45,6 @@ class Drone:
         self.tello.connect()
         self.tello.streamon()
 
-        self.tello.get_battery()
-
         frame_read = self.tello.get_frame_read()
 
         count = 0
@@ -71,13 +69,14 @@ class Drone:
 
             # read frame
             frameBGR = frame_read.frame
+            frame = cv2.cvtColor(frameBGR, cv2.COLOR_RGB2BGR)
 
             if self.save_path:
-                cv2.imwrite(f'{self.save_path}/{count}.jpg', frameBGR)
+                cv2.imwrite(f'{self.save_path}/{count}.jpg', frame)
                 count += 1
 
-            x_min, y_min, x_max, y_max = self.detector.detectSingle(frameBGR)
-            cv2.rectangle(frameBGR, (x_min, y_min),
+            x_min, y_min, x_max, y_max = self.detector.detectSingle(frame)
+            cv2.rectangle(frame, (x_min, y_min),
                           (x_max, y_max), (255, 0, 0), 2)
 
             if not self.flight_mode and self.send_rc_control and x_max != 0 and y_max != 0:
@@ -119,11 +118,11 @@ class Drone:
                 self.left_right_velocity = 0
 
                 # Draw the target as a circle
-                cv2.circle(frameBGR, (targ_cord_x, targ_cord_y),
+                cv2.circle(frame, (targ_cord_x, targ_cord_y),
                            10, (0, 255, 0), 2)
 
                 # Draw the safety zone
-                cv2.rectangle(frameBGR, (targ_cord_x - self.safety_x, targ_cord_y - self.safety_y), (targ_cord_x + self.safety_x, targ_cord_y + self.safety_y),
+                cv2.rectangle(frame, (targ_cord_x - self.safety_x, targ_cord_y - self.safety_y), (targ_cord_x + self.safety_x, targ_cord_y + self.safety_y),
                               (0, 255, 0), 2)
             elif not self.flight_mode and self.send_rc_control and x_max == 0 and y_max == 0:
                 self.for_back_velocity = 0
@@ -168,7 +167,7 @@ class Drone:
                 self.tello.send_rc_control(self.left_right_velocity, self.for_back_velocity, self.up_down_velocity,
                                            self.yaw_velocity)
 
-            cv2.imshow('Tello Drone', frameBGR)
+            cv2.imshow('Tello Drone', frame)
         # Destroy cv2 windows and end drone connection
         cv2.destroyAllWindows()
         self.tello.end()
@@ -177,8 +176,8 @@ class Drone:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-os', '--overwrite_speed', type=int,
-                        default=30, help='Speed for manual use')
-    parser.add_argument('-fbs', '--forward_backward_speed', type=int, default=20,
+                        default=50, help='Speed for manual use')
+    parser.add_argument('-fbs', '--forward_backward_speed', type=int, default=30,
                         help='Speed of forward and backward movement drone')
     parser.add_argument('-ss', '--steering_speed', type=int, default=40,
                         help='Steering speed')

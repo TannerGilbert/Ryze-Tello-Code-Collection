@@ -1,10 +1,10 @@
+import argparse
 import os
 
-from djitellopy import Tello
 import cv2
 import numpy as np
-import argparse
 from detect_face import detectFaces
+from djitellopy import Tello
 
 # TODO: Add better distance values
 sizes = [406, 304, 202, 136]
@@ -191,7 +191,7 @@ class Drone:
                 self.tello.send_rc_control(self.left_right_velocity, self.for_back_velocity, self.up_down_velocity,
                                            self.yaw_velocity)
 
-            cv2.imshow('Tello Drone', frameBGR)
+            cv2.imshow('Tello Drone', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
         # Destroy cv2 windows and end drone connection
         cv2.destroyAllWindows()
         self.tello.end()

@@ -1,9 +1,9 @@
+import argparse
 import os
 
-from djitellopy import Tello
-import argparse
 import cv2
 import keyboard
+from djitellopy import Tello
 
 
 class RyzeTello:
@@ -16,6 +16,7 @@ class RyzeTello:
         self.left_right_velocity = 0
         self.up_down_velocity = 0
         self.yaw_velocity = 0
+        self.speed = 100
         self.send_rc_control = False
 
         self.save_session = save_session
@@ -28,8 +29,6 @@ class RyzeTello:
         self.tello.connect()
         self.tello.streamon()
 
-        self.tello.get_battery()
-
         frame_read = self.tello.get_frame_read()
         imgCount = 0
 
@@ -39,6 +38,7 @@ class RyzeTello:
                 break
 
             frame = frame_read.frame
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
             if self.save_session:
                 cv2.imwrite(f'{self.save_path}/{imgCount}.jpg', frame)
@@ -87,6 +87,13 @@ class RyzeTello:
                     self.yaw_velocity = -self.speed
                 else:
                     self.yaw_velocity = 0
+                
+                if keyboard.is_pressed('+'):
+                    if self.speed <= 95:
+                        self.speed += 5
+                if keyboard.is_pressed('#'):
+                    if self.speed >= -95:
+                        self.speed -= 5
 
                 print(self.left_right_velocity, self.for_back_velocity,
                       self.up_down_velocity, self.yaw_velocity)
@@ -94,7 +101,7 @@ class RyzeTello:
                 self.tello.send_rc_control(
                     self.left_right_velocity, self.for_back_velocity, self.up_down_velocity, self.yaw_velocity)
 
-            # cv2.putText(frame, f'Battery: {str(self.tello.get_battery())[:2]}%', (30, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            cv2.putText(frame, f'Battery: {str(self.tello.get_battery())}%', (30, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
             cv2.imshow('Tello Drone', frame)
 
         # Destroy cv2 windows and end drone connection
